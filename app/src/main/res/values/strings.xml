@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TasksManager</string>
+    <string name="app_title">Task Organizer</string>
+    <string name="navBar1">zadania\n\n</string>
+    <string name="navBar2">projekty</string>
+    <string name="navBar3">plan w formie kalendarza</string>
+</resources>

@@ -1,0 +1,207 @@
+{
+  "name": "przycisk_witam",
+  "version": 33,
+  "source-key": {
+    "type": "figma",
+    "file": "nhqS5645yyfs9mke0Ptlwm",
+    "node": "1:10",
+    "version": "5421572334",
+    "component-id": "2a2e17681aa327b4281a26df629ae7984d32a783"
+  },
+  "default": "Property 1=wariacja",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "vector",
+        "id": "Rectangle 1"
+      },
+      {
+        "type": "text",
+        "id": "Witam"
+      },
+      {
+        "type": "text",
+        "id": "Albo nie"
+      }
+    ],
+    "modes": {
+      "Property 1=wariacja": {
+        "rules": [
+          {
+            "id": "top_level",
+            "is-structured": false,
+            "children": [
+              "Rectangle 1",
+              "Witam"
+            ],
+            "clip-content": false
+          },
+          {
+            "id": "Rectangle 1",
+            "tap-handler": "$onClick",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            },
+            "vector-content": "rectangle_1.svg"
+          },
+          {
+            "id": "Witam",
+            "margin": {
+              "left": 138.0,
+              "top": 90.0,
+              "right": 139.0,
+              "bottom": 90.0
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            },
+            "text-content": "$centerText",
+            "overflow": "visible",
+            "max-lines": -1,
+            "text-align": "left",
+            "text-size": 24.0,
+            "line-height": 1.2102272510528564,
+            "typeface": "Inter"
+          }
+        ]
+      },
+      "Property 1=Default": {
+        "rules": [
+          {
+            "id": "top_level",
+            "is-structured": false,
+            "children": [
+              "Rectangle 1",
+              "Witam",
+              "Albo nie"
+            ],
+            "clip-content": false
+          },
+          {
+            "id": "Rectangle 1",
+            "tap-handler": "$onClick",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            },
+            "vector-content": "rectangle_2.svg"
+          },
+          {
+            "id": "Witam",
+            "margin": {
+              "left": 138.0,
+              "top": 90.0,
+              "right": 139.0,
+              "bottom": 90.0
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            },
+            "text-content": "$centerText",
+            "overflow": "visible",
+            "max-lines": -1,
+            "text-align": "left",
+            "text-size": 24.0,
+            "line-height": 1.2102272510528564,
+            "typeface": "Inter"
+          },
+          {
+            "id": "Albo nie",
+            "margin": {
+              "left": 24.0,
+              "top": 16.0,
+              "right": 215.0,
+              "bottom": 119.0
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": 1.0
+              }
+            },
+            "text-content": "Albo nie",
+            "overflow": "visible",
+            "max-lines": -1,
+            "text-align": "left",
+            "text-size": 24.0,
+            "line-height": 1.2102272510528564,
+            "typeface": "Inter"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "onClick": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "centerText": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "Property 1=wariacja",
+      "size": {
+        "width": 353.0,
+        "height": 209.0
+      },
+      "parameters": {
+        "centerText": "Witam"
+      }
+    },
+    {
+      "design": "Property 1=Default",
+      "size": {
+        "width": 353.0,
+        "height": 209.0
+      },
+      "parameters": {
+        "centerText": "Witam"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
