@@ -4,4 +4,8 @@
     <string name="navBar1">zadania\n\n</string>
     <string name="navBar2">projekty</string>
     <string name="navBar3">plan w formie kalendarza</string>
+    <string name="titleCalendar">" - Calendar"</string>
+    <string name="titleAddingTask">" - Adding Task"</string>
+    <string name="titleProjectsList">" - Projects List"</string>
+    <string name="titleTasksList">" - Tasks List"</string>
 </resources>

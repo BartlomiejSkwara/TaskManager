@@ -16,30 +16,39 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.tasksmanager.Footer
 import com.example.tasksmanager.FooterState
 import com.example.tasksmanager.MyHeader
+import com.example.tasksmanager.R
 import com.example.tasksmanager.ui.NewTaskForm
 import com.example.tasksmanager.ui.TaskCardList
 import com.example.tasksmanager.TaskOrganizerScreen
+import com.example.tasksmanager.model.TaskFormViewModel
+import com.example.tasksmanager.model.TaskListViewModel
 import com.example.tasksmanager.ui.theme.TasksManagerTheme
+import kotlinx.coroutines.launch
 
 
 @Composable
 @Preview
 fun StructureSectionTask(navController: NavHostController = rememberNavController()){
+    val viewModel: TaskListViewModel = viewModel(factory = TaskListViewModel.Factory);
+
     UniversalStructure(
-        innerContent = {modifier -> TaskCardList(modifier) },
-        headerSectionTitle = " - Tasks List",
+        innerContent = {modifier -> TaskCardList(modifier,viewModel) },
+        headerSectionTitle = stringResource(R.string.titleTasksList),
         onFabClick = {
             navController.navigate(route = TaskOrganizerScreen.TaskForm.name);
         },
@@ -55,7 +64,7 @@ fun StructureSectionTask(navController: NavHostController = rememberNavControlle
 fun StructureSectionProjects(navController: NavHostController = rememberNavController()){
     UniversalStructure(
         innerContent = {},
-        headerSectionTitle = " - Projects List",
+        headerSectionTitle = stringResource(R.string.titleProjectsList),
         onFabClick = {},
         fabIcon = Icons.Filled.Add,
         footerState = FooterState.Projects,
@@ -68,7 +77,7 @@ fun StructureSectionProjects(navController: NavHostController = rememberNavContr
 fun StructureSectionCalendar(navController: NavHostController = rememberNavController()){
     UniversalStructure(
         innerContent = {},
-        headerSectionTitle = " - Calendar",
+        headerSectionTitle = stringResource(R.string.titleCalendar),
         onFabClick = {},
         fabIcon = Icons.Filled.Add,
         footerState = FooterState.Calendar,
@@ -79,16 +88,27 @@ fun StructureSectionCalendar(navController: NavHostController = rememberNavContr
 @Composable
 @Preview
 fun StructureFormTask(navController: NavHostController = rememberNavController()){
+    val viewModel: TaskFormViewModel = viewModel(factory = TaskFormViewModel.Factory);
+    val coroutineScope = rememberCoroutineScope()
+
     UniversalStructure(
-        innerContent = {modifier -> NewTaskForm(modifier) },
-        headerSectionTitle = " - Adding Task",
+        innerContent = {modifier -> NewTaskForm(modifier, viewModel = viewModel) },
+        headerSectionTitle = stringResource(R.string.titleAddingTask),
         headerNavigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
         onHeaderNavIconClick = {
             navController.navigate(route = TaskOrganizerScreen.Tasks.name);
 
 
         },
-        onFabClick = {},
+        onFabClick = {
+            coroutineScope.launch {
+                if(viewModel.saveItem())
+                {
+                    navController.navigate(route = TaskOrganizerScreen.Tasks.name);
+
+                }
+            }
+        },
         fabIcon = Icons.Filled.Done,
         footerState = FooterState.Hidden,
         navController = navController
@@ -102,7 +122,6 @@ fun UniversalStructure(
     innerContent: @Composable (Modifier) -> Unit,
     footerState: FooterState = FooterState.Hidden,
 
-    /// TODO FIX  icon not showing up
     headerNavigationIcon: ImageVector? = null,
     onHeaderNavIconClick: (() -> Unit)? = null,
     headerSectionTitle: String,
