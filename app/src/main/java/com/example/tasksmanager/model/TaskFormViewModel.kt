@@ -19,6 +19,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import kotlin.random.Random
 
 class TaskFormViewModel(
     private val taskRepository: TaskRepository,
@@ -90,7 +91,7 @@ class TaskFormViewModel(
     };
 
 
-    suspend fun saveItem(): Boolean {
+    suspend fun saveItem(): Task? {
         if(validateInput()){
 //            var list: List<Task> = emptyList()
 
@@ -99,23 +100,25 @@ class TaskFormViewModel(
 //                list=task
 //            }
 
+            val insertedTask = Task(
+                title = topic,
+                description = description,
+                reminderTime = reminderHour.toSecondOfDay(),
+                deadlineDay = deadlineTimestamp.toEpochDay(),
+                hue = Random.nextInt(0,360).toFloat()
+            );
             taskRepository.insertItem(
-                Task(
-                    title = topic,
-                    description = description,
-                    reminderTime = reminderHour.toSecondOfDay(),
-                    deadlineDay = deadlineTimestamp.toEpochDay()
-                )
-            )
+                insertedTask
+            );
 
 //            taskRepository.getAllItemsStream().collect{
 //                    task->
 //                list=task
 //            }
-            return true;
+            return insertedTask;
         }
 
-        return false
+        return null;
     }
 
 

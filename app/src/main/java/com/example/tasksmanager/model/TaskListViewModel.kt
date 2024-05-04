@@ -14,8 +14,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class TaskListViewModel(taskRepository: TaskRepository, savedStateHandle: SavedStateHandle)
+class TaskListViewModel(
+    private  val taskRepository: TaskRepository,
+    savedStateHandle: SavedStateHandle)
     :ViewModel()
+
 {
 
 
@@ -29,6 +32,9 @@ class TaskListViewModel(taskRepository: TaskRepository, savedStateHandle: SavedS
         )
 
 
+    suspend fun completeTask(task: Task){
+        taskRepository.deleteItem(task);
+    }
 
 
 

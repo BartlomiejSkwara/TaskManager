@@ -13,7 +13,8 @@ data class Task (
     val title: String,
     val description: String,
     val reminderTime: Int,
-    val deadlineDay: Long
+    val deadlineDay: Long,
+    val hue: Float
     //        reminderHour.toSecondOfDay()
     //        LocalTime.ofSecondOfDay()
     //        LocalDate.ofEpochDay()

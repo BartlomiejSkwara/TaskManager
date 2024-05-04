@@ -2,7 +2,6 @@
 
 package com.example.tasksmanager.ui
 
-import UserTaskInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -42,20 +41,20 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.tasksmanager.data.Task
 import com.example.tasksmanager.model.TaskFormViewModel
 import com.example.tasksmanager.model.TaskListViewModel
 import com.example.tasksmanager.ui.theme.onSurfaceVariantDark
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.Locale
 
 
@@ -64,21 +63,22 @@ import java.util.Locale
 fun TaskCardList(modifier: Modifier = Modifier, viewModel: TaskListViewModel){
 
 
-    val taskArray:MutableList<UserTaskInfo> = mutableListOf();
+
+    val taskArray:MutableList<Task> = mutableListOf();
 //
     viewModel.taskListStateFlow.collectAsState().value.forEach(
         {t->
-        taskArray.add(UserTaskInfo(t.title,t.description,t.getLocalDateTime()))
+        taskArray.add(t)
     })
-//    repeat(15){
-//        taskArray.add(UserTaskInfo("Wynieś śmieci karambas", "nazbierały się tony śmieci i trzeba je wywalić",
-//            LocalDateTime.now()));
-//        taskArray.add(UserTaskInfo("Small", "proste zadanko",
-//            LocalDateTime.now()));
-//
-//    }
 
+    val coroutineScope = rememberCoroutineScope()
 
+    val onTaskCheckedChange: (Task) -> Unit = { task ->
+        coroutineScope.launch {
+
+            viewModel.completeTask(task);
+        }
+    }
 
     LazyColumn(
         modifier = modifier,
@@ -87,7 +87,9 @@ fun TaskCardList(modifier: Modifier = Modifier, viewModel: TaskListViewModel){
 
     ){
         items(taskArray){
-            TaskCard(it)
+            TaskCard(it,
+                 onTaskCheckedChange
+            )
 
         }
     }
@@ -96,10 +98,8 @@ fun TaskCardList(modifier: Modifier = Modifier, viewModel: TaskListViewModel){
 
 
 @Composable
-@Preview
-fun TaskCard(eventInfo: UserTaskInfo = UserTaskInfo("null", "null", LocalDateTime.now(), Color.hsv(35.6f,0.885f,0.718f) ), modifier: Modifier = Modifier){
-
-
+fun TaskCard(task: Task, onCheckedChange:(Task) -> Unit, modifier: Modifier = Modifier){
+    val date = task.getLocalDateTime();
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.inverseOnSurface,
@@ -115,25 +115,28 @@ fun TaskCard(eventInfo: UserTaskInfo = UserTaskInfo("null", "null", LocalDateTim
                 .padding(horizontal = 16.dp))
         {
             Column(modifier = Modifier.weight(3f)) {
-                Text(text = eventInfo.topic,
+                Text(text = task.title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium
                 );
-                Text(text = eventInfo.description,
+                Text(text = task.description,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall
                 );
             }
             Column (modifier = Modifier.weight(2f)){
-                Text(text = "${eventInfo.deadline.dayOfMonth}.${eventInfo.deadline.monthValue}.${eventInfo.deadline.year}",);
-                Text(text = "${eventInfo.deadline.hour}:${eventInfo.deadline.minute}");
+                Text(text = String.format("%02d.%02d.%d",date.dayOfMonth,date.monthValue,date.year));
+                //"${}.${date.monthValue}.${}");
+
+                Text(text = String.format("%02d:%02d", date.hour, date.minute));
             }
+
 
             Box(
                 modifier = androidx.compose.ui.Modifier
-                    .background(eventInfo.color)
+                    .background(Color.hsv(task.hue, 0.885f, 0.718f))
                     .fillMaxHeight()
                     .weight(1f),
                 contentAlignment = Alignment.Center,
@@ -141,7 +144,9 @@ fun TaskCard(eventInfo: UserTaskInfo = UserTaskInfo("null", "null", LocalDateTim
                 ) {
                 Checkbox(
                     checked = false,
-                    onCheckedChange = { /* handle checked state */ },
+                    onCheckedChange = {
+                        onCheckedChange(task);
+                    },
 
                     )
             }
@@ -273,11 +278,12 @@ fun NewTaskForm(modifier: Modifier =Modifier, viewModel: TaskFormViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimePickerDialogCustom(openDialog: Boolean,
-                           onCancel: () -> Unit,
-                           onOk: (Int,Int) -> Unit,
+fun TimePickerDialogCustom(
+    openDialog: Boolean,
+    onCancel: () -> Unit,
+    onOk: (Int, Int) -> Unit,
 
-) {
+    ) {
     val state = rememberTimePickerState()
     val formatter = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
 

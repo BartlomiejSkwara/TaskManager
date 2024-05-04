@@ -2,8 +2,25 @@
 
 package com.example.tasksmanager
 
+import android.Manifest
+import android.app.Notification
+import android.content.Context
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 
+import androidx.compose.runtime.*
 
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.NotificationCompat
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,6 +35,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,16 +46,22 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.tasksmanager.alarms.AndroidAlarmScheduler
 import com.example.tasksmanager.ui.theme.TasksManagerTheme
 import com.example.ui.tasksmanager.StructureFormTask
 import com.example.ui.tasksmanager.StructureSectionCalendar
@@ -47,18 +71,29 @@ import com.example.ui.tasksmanager.StructureSectionTask
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContent {
             TasksManagerTheme {
-                // A surface container using the 'background' color from the theme
+
+
+
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
                     Navigation()
+
                 }
             }
         }
+
+
     }
+
+
 }
 
 
@@ -105,121 +140,4 @@ fun Navigation( modifier: Modifier = Modifier) {
 
 
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyHeader(sectionName:String, navigationIconVector: ImageVector? = null, onHeaderNavIconClick: (() -> Unit)? = null, modifier: Modifier = Modifier ) {
-    CenterAlignedTopAppBar(
-        title = {
-            Row(
-                modifier = Modifier.fillMaxHeight(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = stringResource(R.string.app_title)+sectionName,
-                    style = MaterialTheme.typography.titleLarge
-                    )
-
-            }
-        },
-        navigationIcon = {
-            if (navigationIconVector != null && onHeaderNavIconClick != null) {
-                IconButton(onClick = onHeaderNavIconClick ) {
-                    Icon(
-                        imageVector = navigationIconVector,
-                        contentDescription = ""
-                    )
-                }
-            }
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp),
-        )
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Footer(footerState: FooterState, onClick1: () -> Unit, onClick2: () -> Unit, onClick3: () -> Unit, modifier: Modifier = Modifier ) {
-    //var selected by remember
-    NavigationBar (
-        modifier = Modifier
-            .height(60.dp)
-    ) {
-        NavigationBarItem(
-            icon = {
-//                BadgedBox(
-//                    badge = {
-//                        Badge {
-//                            val badgeNumber = "8"
-//                            Text(
-//                                badgeNumber,
-//                                modifier = Modifier.semantics {
-//                                    contentDescription = "$badgeNumber new notifications"
-//                                }
-//                            )
-//                        }
-//                    }) {
-                    Icon(
-                        Icons.Filled.Check,
-                        contentDescription = stringResource(R.string.navBar1)
-                    )
-                //}
-
-            },
-            selected = footerState==FooterState.Task,
-            onClick = {if(footerState!=FooterState.Task)onClick1()}
-        )
-        NavigationBarItem(
-            icon = {
-//                BadgedBox(
-//                    badge = {
-//                        Badge {
-//                            val badgeNumber = "8"
-//                            Text(
-//                                badgeNumber,
-//                                modifier = Modifier.semantics {
-//                                    contentDescription = "$badgeNumber new notifications"
-//                                }
-//                            )
-//                        }
-//                    }) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.List,
-                        contentDescription = stringResource(R.string.navBar2)
-                    )
-                //}
-
-            },
-            selected = footerState==FooterState.Projects,
-            onClick = {if(footerState!=FooterState.Projects)onClick2()}
-
-        );
-        NavigationBarItem(
-            icon = {
-//                BadgedBox(
-//                    badge = {
-//                        Badge {
-//                            val badgeNumber = "8"
-//                            Text(
-//                                badgeNumber,
-//                                modifier = Modifier.semantics {
-//                                    contentDescription = "$badgeNumber new notifications"
-//                                }
-//                            )
-//                        }
-//                    }) {
-                    Icon(
-                        Icons.Filled.DateRange,
-                        contentDescription = stringResource(R.string.navBar3)
-                    )
-                //}
-
-            },
-            selected = footerState==FooterState.Calendar,
-            onClick = {if(footerState!=FooterState.Calendar)onClick3()}
-
-        );
-    }
-}
 
