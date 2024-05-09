@@ -34,6 +34,7 @@ class TaskListViewModel(
 
     suspend fun completeTask(task: Task){
         taskRepository.deleteItem(task);
+
     }
 
 

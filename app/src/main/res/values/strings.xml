@@ -8,6 +8,12 @@
     <string name="titleAddingTask">" - Adding Task"</string>
     <string name="titleProjectsList">" - Projects List"</string>
     <string name="titleTasksList">" - Tasks List"</string>
-    <string name="notification_content">Uwaga pozostała Ci już tylko godzina do wykonania zadania %1$s</string>
+    <string name="notification_content">Zadanie: \"%1$s\" ma deadline za mniej niż godzina </string>
     <string name="notificationTitle">Przypomnienie</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_description">Task Description</string>
+    <string name="task_deadline">Task deadline</string>
+    <string name="deadline_hour">Deadline hour</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 </resources>

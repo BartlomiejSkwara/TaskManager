@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.tasksmanager.MyApplication
 import com.example.tasksmanager.data.Task
 import com.example.tasksmanager.data.TaskRepository
+import kotlinx.coroutines.flow.firstOrNull
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -82,7 +83,6 @@ class TaskFormViewModel(
     };
 
     fun changeReminderTimestamp(hour: Int, min: Int){
-        // todo może trzeba zmienić to utc
         reminderHour = LocalTime.of(hour,min);
 
 //        deadlineTimestamp.toEpochDay()
@@ -100,22 +100,23 @@ class TaskFormViewModel(
 //                list=task
 //            }
 
-            val insertedTask = Task(
+            var insertedTask = Task(
                 title = topic,
                 description = description,
                 reminderTime = reminderHour.toSecondOfDay(),
                 deadlineDay = deadlineTimestamp.toEpochDay(),
                 hue = Random.nextInt(0,360).toFloat()
             );
-            taskRepository.insertItem(
+            val newId = taskRepository.insertItem(
                 insertedTask
             );
 
+
+            return taskRepository.getItemStream(newId).firstOrNull();
 //            taskRepository.getAllItemsStream().collect{
 //                    task->
 //                list=task
 //            }
-            return insertedTask;
         }
 
         return null;

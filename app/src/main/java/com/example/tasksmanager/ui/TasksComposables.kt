@@ -2,6 +2,11 @@
 
 package com.example.tasksmanager.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,15 +45,23 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.content.ContextCompat
+import com.example.tasksmanager.R
+import com.example.tasksmanager.alarms.AndroidAlarmScheduler
 import com.example.tasksmanager.data.Task
 import com.example.tasksmanager.model.TaskFormViewModel
 import com.example.tasksmanager.model.TaskListViewModel
@@ -73,10 +86,39 @@ fun TaskCardList(modifier: Modifier = Modifier, viewModel: TaskListViewModel){
 
     val coroutineScope = rememberCoroutineScope()
 
+
+
+
+    val  context  = LocalContext.current
+
+    var hasNotificationPermission by remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mutableStateOf(
+                ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.POST_NOTIFICATIONS)
+                        == PackageManager.PERMISSION_GRANTED
+
+            )
+        } else mutableStateOf(true)
+    }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = {
+                isGranted->hasNotificationPermission = isGranted;
+//                            if(!isGranted){
+//                                shouldShowRequestPermissionRationale()
+//                            }
+        });
+
+
+
+    val scheduler = AndroidAlarmScheduler(context);
+
     val onTaskCheckedChange: (Task) -> Unit = { task ->
         coroutineScope.launch {
 
             viewModel.completeTask(task);
+            scheduler.cancel(task);
         }
     }
 
@@ -182,11 +224,11 @@ fun NewTaskForm(modifier: Modifier =Modifier, viewModel: TaskFormViewModel) {
     ) {
         OutlinedTextField(value = viewModel.topic,
             onValueChange = { viewModel.changeTopic(it)},
-            label = { Text("Task Title") }
+            label = { Text(stringResource(R.string.task_title)) }
         )
         OutlinedTextField(value = viewModel.description,
             onValueChange = {viewModel.changeDescription(it)},
-            label = { Text("Task Description") },
+            label = { Text(stringResource(R.string.task_description)) },
             singleLine = false,
             minLines = 3,
             maxLines = 5
@@ -202,7 +244,7 @@ fun NewTaskForm(modifier: Modifier =Modifier, viewModel: TaskFormViewModel) {
             modifier = Modifier.clickable {viewModel.changeDateModalVisibility(true)},
             value = viewModel.formattedDeadline,
             onValueChange = {},
-            label = { Text("Task deadline") },
+            label = { Text(stringResource(R.string.task_deadline)) },
             leadingIcon = {
 
                     Icon(imageVector = Icons.Filled.DateRange, contentDescription = null)
@@ -237,7 +279,7 @@ fun NewTaskForm(modifier: Modifier =Modifier, viewModel: TaskFormViewModel) {
             modifier = Modifier.clickable {viewModel.changeReminderHourModalVisibility(true)},
             value = viewModel.formattedReminderHour,
             onValueChange = {},
-            label = { Text("Task reminder") },
+            label = { Text(stringResource(R.string.deadline_hour)) },
             leadingIcon = {
 
                 Icon(imageVector = Icons.Filled.Notifications, contentDescription = null)
@@ -349,10 +391,10 @@ fun TimePickerDialog(
                     toggle()
                     Spacer(modifier = Modifier.weight(1f))
                     TextButton(onClick = onCancel) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                     TextButton(onClick = onConfirm) {
-                        Text("OK")
+                        Text(stringResource(R.string.ok))
                     }
                 }
             }

@@ -117,7 +117,7 @@ fun Navigation( modifier: Modifier = Modifier) {
 
         composable(route = TaskOrganizerScreen.Tasks.name){
            StructureSectionTask(taskManagerNavController.navController)
-
+            
         }
         composable(route = TaskOrganizerScreen.TaskForm.name){
             StructureFormTask(taskManagerNavController.navController)
