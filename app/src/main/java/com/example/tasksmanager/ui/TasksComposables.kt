@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -56,6 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -71,6 +73,11 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
+/**
+ * composable reprezentujące główny element widoku listy zadań
+ * @param modifier - modyfikatory dla Composable funkcji
+ * @param viewModel - view model dla widoku listy zadań
+ */
 @Composable
 //@Preview
 fun TaskCardList(modifier: Modifier = Modifier, viewModel: TaskListViewModel){
@@ -138,9 +145,15 @@ fun TaskCardList(modifier: Modifier = Modifier, viewModel: TaskListViewModel){
 }
 
 
-
+/**
+ * composable reprezentujące pojedyncze zadanie
+ * @param task - reprezentowane zadanie
+ * @param onCheckedChange - lambda wykonywana po wciśnięciu przycisku po prawej stronie karty
+ * @param modifier  - modyfikatory dla Composable funkcji
+ */
 @Composable
-fun TaskCard(task: Task, onCheckedChange:(Task) -> Unit, modifier: Modifier = Modifier){
+fun TaskCard(task: Task ,
+             onCheckedChange:(Task) -> Unit , modifier: Modifier = Modifier){
     val date = task.getLocalDateTime();
     Card(
         colors = CardDefaults.cardColors(
@@ -148,27 +161,34 @@ fun TaskCard(task: Task, onCheckedChange:(Task) -> Unit, modifier: Modifier = Mo
 
             //containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        modifier = Modifier
-            .size(width = 336.dp, height = 66.dp)
+        modifier = Modifier.width(336.dp)
+
     ) {
         Row ( verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
-                .padding(horizontal = 16.dp))
+                .padding(horizontal = 16.dp)
+                .height(IntrinsicSize.Min))
         {
-            Column(modifier = Modifier.weight(3f)) {
+            Column(
+                modifier = Modifier.weight(3f)
+                    .padding(vertical = 8.dp)
+            ) {
                 Text(text = task.title,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium
                 );
                 Text(text = task.description,
-                    maxLines = 2,
+                    maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall
                 );
             }
-            Column (modifier = Modifier.weight(2f)){
+            Column (
+                modifier = Modifier.weight(2f)
+                    .padding(vertical = 8.dp)
+            ){
                 Text(text = String.format("%02d.%02d.%d",date.dayOfMonth,date.monthValue,date.year));
                 //"${}.${date.monthValue}.${}");
 
@@ -180,6 +200,7 @@ fun TaskCard(task: Task, onCheckedChange:(Task) -> Unit, modifier: Modifier = Mo
                 modifier = androidx.compose.ui.Modifier
                     .background(Color.hsv(task.hue, 0.885f, 0.718f))
                     .fillMaxHeight()
+                    .size(width = 50.dp, height = 50.dp)
                     .weight(1f),
                 contentAlignment = Alignment.Center,
 
@@ -201,7 +222,11 @@ fun TaskCard(task: Task, onCheckedChange:(Task) -> Unit, modifier: Modifier = Mo
 }
 
 
-
+/**
+ * composable reprezentujące główny element widoku formularza zadań
+ * @param modifier - modyfikatory dla Composable funkcji
+ * @param viewModel - view model dla widoku listy zadań
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewTaskForm(modifier: Modifier =Modifier, viewModel: TaskFormViewModel) {
@@ -213,9 +238,6 @@ fun NewTaskForm(modifier: Modifier =Modifier, viewModel: TaskFormViewModel) {
     //}
 
 
-
-
-
     Column(
         modifier = modifier
             .fillMaxHeight()
@@ -224,7 +246,7 @@ fun NewTaskForm(modifier: Modifier =Modifier, viewModel: TaskFormViewModel) {
     ) {
         OutlinedTextField(value = viewModel.topic,
             onValueChange = { viewModel.changeTopic(it)},
-            label = { Text(stringResource(R.string.task_title)) }
+            label = { Text(stringResource(R.string.task_title)) },
         )
         OutlinedTextField(value = viewModel.description,
             onValueChange = {viewModel.changeDescription(it)},
@@ -318,6 +340,13 @@ fun NewTaskForm(modifier: Modifier =Modifier, viewModel: TaskFormViewModel) {
 
 }
 
+
+/**
+ * composable reprezentuje pole do wyboru godziny w formularzu
+ * @param openDialog - określa czy okienko dialogowe jest otwarte
+ * @param onCancel - lambda określająca co stanie się po wybraniu opcji cancel podczas wyboru godziny
+ * @param onOk - lambda określająca co stanie się po wybraniu opcji ok podczas wyboru godziny
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerDialogCustom(
@@ -457,5 +486,8 @@ fun DatePickerDialog(openDialog: Boolean,
         }
     }
 }
+
+
+
 
 

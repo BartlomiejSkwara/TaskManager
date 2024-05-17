@@ -14,6 +14,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
+/**
+ * Task list view model
+ * view model dla widoku zadań do wykonania
+ * @property taskRepository - repozytorium pozwalające  wykonywanie operacji CRUD na tabeli tasks
+ * jest automatycznie wstrzykiwana a proces wstrzykiwania jest zdefiniowany w companion object
+ *
+ */
 class TaskListViewModel(
     private  val taskRepository: TaskRepository,
     savedStateHandle: SavedStateHandle)
@@ -22,7 +29,11 @@ class TaskListViewModel(
 {
 
 
-
+    /**
+     * Task list state flow
+     * Lista zadń z bazy danych w postaci strumienia który jest emitowany za każdym razem
+     * gdy dojdzie do zmian w bazie danych
+     */
 
     val taskListStateFlow: StateFlow<List<Task>> =
         taskRepository.getAllItemsStream().stateIn(
@@ -32,6 +43,10 @@ class TaskListViewModel(
         )
 
 
+    /**
+     * metoda oznacza zadanie jako ukończone poprzez usunięcie go z bazy danych
+     * @param task - zadanie do usunięcia
+     */
     suspend fun completeTask(task: Task){
         taskRepository.deleteItem(task);
 

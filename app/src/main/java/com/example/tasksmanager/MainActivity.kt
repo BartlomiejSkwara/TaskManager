@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.tasksmanager.alarms.AndroidAlarmScheduler
 import com.example.tasksmanager.ui.theme.TasksManagerTheme
 import com.example.ui.tasksmanager.StructureFormTask
@@ -68,65 +69,63 @@ import com.example.ui.tasksmanager.StructureSectionCalendar
 import com.example.ui.tasksmanager.StructureSectionProjects
 import com.example.ui.tasksmanager.StructureSectionTask
 
+
+/**
+ * Main activity
+ * główna aktywność
+ */
 class MainActivity : ComponentActivity() {
+    /**
+     * On create
+     * przygotowania w ramach rozpoczęcia działania aktywności takie jak przekazanie @Composable do renderowania i aktywacja nawigacji
+     * @param savedInstanceState - poprzedni stan aktywności lub null
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         setContent {
             TasksManagerTheme {
-
-
-
-
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
                     Navigation()
-
                 }
             }
         }
-
-
     }
-
-
 }
 
 
-
-
-
-
-
-
+/**
+ * Navigation
+ * metoda odpowiedzialna za nawigację między widokami
+ * TworzyNavHostController  i NavHost z określonymi routami do poszczególnych widoków
+ * @param modifier - modyfikatory które zostaną zaaplikowane do  do @Composable
+ */
 @Composable
 @Preview
 fun Navigation( modifier: Modifier = Modifier) {
 
-    val taskManagerNavController = rememberTaskManagerNavController();
+    val taskManagerNavController = rememberNavController();
 
     NavHost(
-        navController = taskManagerNavController.navController,
+        navController = taskManagerNavController,
         startDestination = TaskOrganizerScreen.Tasks.name,
         //modifier = Modifier.padding(modifiedPadding)
     ){
 
         composable(route = TaskOrganizerScreen.Tasks.name){
-           StructureSectionTask(taskManagerNavController.navController)
+           StructureSectionTask(taskManagerNavController)
             
         }
         composable(route = TaskOrganizerScreen.TaskForm.name){
-            StructureFormTask(taskManagerNavController.navController)
+            StructureFormTask(taskManagerNavController)
         }
         composable(route = TaskOrganizerScreen.Projects.name){
-            StructureSectionProjects(taskManagerNavController.navController)
+            StructureSectionProjects(taskManagerNavController)
         }
         composable(route = TaskOrganizerScreen.Calendar.name){
-            StructureSectionCalendar(taskManagerNavController.navController)
+            StructureSectionCalendar(taskManagerNavController)
         }
 //        composable(route = TaskOrganizerScreen.TaskForm.name){
 //            StructureFormTask(navController)

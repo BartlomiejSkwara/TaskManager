@@ -1,7 +1,20 @@
+import org.jetbrains.dokka.DokkaConfiguration
+import org.jetbrains.dokka.DokkaDefaults
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("org.jetbrains.dokka") version "1.9.20"
+
+}
+
+
+tasks.dokkaHtml{
+    suppressInheritedMembers.set(true);
+    DokkaDefaults.documentedVisibilities.plus(DokkaConfiguration.Visibility.PRIVATE);
+    moduleName.set("Task Manager");
+    //DokkaDefaults.includeNonPublic.
 }
 
 android {

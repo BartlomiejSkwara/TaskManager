@@ -98,6 +98,11 @@ import com.example.ui.tasksmanager.StructureSectionProjects
 import com.example.ui.tasksmanager.StructureSectionTask
 
 
+/**
+ * uniwersalna struktura dostoswana do widoku listy zadań
+ *
+ * @param navController - instancja nav controllera
+ */
 @Composable
 @Preview
 fun StructureSectionTask(navController: NavHostController = rememberNavController()){
@@ -142,6 +147,12 @@ fun StructureSectionCalendar(navController: NavHostController = rememberNavContr
 
     )
 }
+
+/**
+ * uniwersalna struktura dostoswana do widoku formularza zadań
+ *
+ * @param navController - instancja nav controllera
+ */
 @Composable
 @Preview
 fun StructureFormTask(navController: NavHostController = rememberNavController()){
@@ -213,6 +224,18 @@ fun StructureFormTask(navController: NavHostController = rememberNavController()
 }
 
 
+/**
+ * funkcja służy jako uniwersalny szablon dla widoków używanych w aplikacji,
+ * pozwala na zmianę kluczowych elementów bez zmiany ogólnej struktury widoku
+ * @param innerContent - główna zawartość specyficzna dla konkretnego widoku
+ * @param footerState - określa czy ma być widoczna stopka
+ * @param headerNavigationIcon - określa jaka ikonka ma widnieć w lewym górnym rogu ekranu
+ * @param onHeaderNavIconClick - lambda określająca co ma się wydarzyć po kliknięciu ikonki w lewym górnym rogu ekranu
+ * @param headerSectionTitle - określa jaki napis ma widnieć w nagłówku
+ * @param fabIcon - określa jaką ikonkę ma zwierać FAB
+ * @param onFabClick - lambda określająca co ma się wydarzyć po kliknięciu w FAB
+ * @param navController - instancja nav controllera
+ */
 @Composable
 fun UniversalStructure(
     innerContent: @Composable (Modifier) -> Unit,
@@ -284,7 +307,6 @@ fun UniversalStructure(
 
 
 
-
 fun calculateModifiedPadding(startingPadding: PaddingValues, layoutDir:LayoutDirection): PaddingValues {
     return PaddingValues(
         top = startingPadding.calculateTopPadding() + 8.dp,
@@ -294,6 +316,14 @@ fun calculateModifiedPadding(startingPadding: PaddingValues, layoutDir:LayoutDir
     );
 }
 
+
+/**
+ * uniwersalny nagłówek
+ * @param sectionName - napis w nagłówku
+ * @param navigationIconVector - ikonka w lewym rogu nagłówka
+ * @param onHeaderNavIconClick - lambda wykonywane po wciśnięciu ikonki w lewym rogu nagłówka
+ * @param modifier - modyfikatory dla Composable funkcji
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyHeader(sectionName:String, navigationIconVector: ImageVector? = null, onHeaderNavIconClick: (() -> Unit)? = null, modifier: Modifier = Modifier ) {
@@ -326,6 +356,15 @@ fun MyHeader(sectionName:String, navigationIconVector: ImageVector? = null, onHe
 }
 
 
+/**
+ * uniwersalna stopka
+ *
+ * @param footerState - stan widoczności stopki
+ * @param onClick1 - lambda wykonywana po wciśnięciu przycisku 1
+ * @param onClick2 - lambda wykonywana po wciśnięciu przycisku 2
+ * @param onClick3 - lambda wykonywana po wciśnięciu przycisku 3
+ * @param modifier - modyfikatory dla Composable funkcji
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Footer(footerState: FooterState, onClick1: () -> Unit, onClick2: () -> Unit, onClick3: () -> Unit, modifier: Modifier = Modifier ) {

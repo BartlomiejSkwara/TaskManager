@@ -5,6 +5,9 @@
       <entry key="EventCard">
         <State />
       </entry>
+      <entry key="TaskCard">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>
